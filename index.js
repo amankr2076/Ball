@@ -1,12 +1,15 @@
-
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+
+        const ballRadius = 150; // Ball radius
+        const canvasPadding = 100; // Padding around the ball to avoid icon cutoff
+        const canvasSize = ballRadius * 2 + canvasPadding; // Canvas size including padding
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
 
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
-        const ballRadius = 150; // Ball radius
+
         const dotsCount = 20; // Number of icons
         const icons = [];
         const baseIconSize = 40; // Base size of the icons
@@ -23,6 +26,15 @@
             "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg",
             "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg",
             "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angular/angular-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vercel/vercel-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cloudflare/cloudflare-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg",
+            "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg"
         ];
 
         // Load icon images
@@ -68,8 +80,8 @@
 
         // Mouse interaction
         canvas.addEventListener('mousemove', (event) => {
-            const mouseX = event.clientX;
-            const mouseY = event.clientY;
+            const mouseX = event.clientX - canvas.offsetLeft;
+            const mouseY = event.clientY - canvas.offsetTop;
 
             // Calculate relative position of the mouse to the ball's center
             const deltaX = mouseX - centerX;
@@ -82,29 +94,29 @@
             // Normalize speed (closer to ball -> slower rotation)
             const speedFactor = 1 - distance / maxDistance;
 
-            angleX = speedFactor * (deltaY / centerY) * 0.05; // Top-to-bottom rotation
-            angleY = speedFactor * (deltaX / centerX) * 0.05; // Left-to-right rotation
+            angleX = speedFactor * (deltaY / centerY) * 0.03; // Top-to-bottom rotation
+            angleY = speedFactor * (deltaX / centerX) * 0.03; // Left-to-right rotation
         });
 
         // Touch interaction for mobile
         canvas.addEventListener('touchstart', (event) => {
             const touch = event.touches[0];
-            touchStartX = touch.clientX;
-            touchStartY = touch.clientY;
+            touchStartX = touch.clientX - canvas.offsetLeft;
+            touchStartY = touch.clientY - canvas.offsetTop;
         });
 
         canvas.addEventListener('touchmove', (event) => {
             const touch = event.touches[0];
-            const touchEndX = touch.clientX;
-            const touchEndY = touch.clientY;
+            const touchEndX = touch.clientX - canvas.offsetLeft;
+            const touchEndY = touch.clientY - canvas.offsetTop;
 
             // Calculate the swipe direction
             const deltaX = touchEndX - touchStartX;
             const deltaY = touchEndY - touchStartY;
 
             // Adjust rotation speed based on swipe direction
-            angleX = (deltaY / centerY) * 0.05; // Top-to-bottom or bottom-to-top
-            angleY = (deltaX / centerX) * 0.05; // Left-to-right or right-to-left
+            angleX = (deltaY / centerY) * 0.02; // Top-to-bottom or bottom-to-top (slower speed)
+            angleY = (deltaX / centerX) * 0.02; // Left-to-right or right-to-left (slower speed)
 
             touchStartX = touchEndX;
             touchStartY = touchEndY;
